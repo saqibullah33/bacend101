@@ -6,12 +6,22 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 // index.js
 import authRoute from './routes/authRoute.js';
+mongoose
+  .connect(mongoDBURL)
+  .then(() => {
+    console.log('App connected to database');
+   
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 const app = express();
 app.use(bodyParser.json()); 
 app.use('/auth', authRoute);
 // Middleware for parsing request body
 app.use(express.json());
 app.use(cors());
+
 app.get('/', (request, response) => {
   console.log(request);
   return response.status(234).send('Welcome to My Ecommerce Store');
@@ -19,14 +29,8 @@ app.get('/', (request, response) => {
 
 app.use('/shirts', shirtsRoute);
 
-mongoose
-  .connect(mongoDBURL)
-  .then(() => {
-    console.log('App connected to database');
-    app.listen(PORT, () => {
-      console.log(`App is listening to port: ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
+
+
+  app.listen(PORT, () => {
+    console.log(`App is listening to port: ${PORT}`);
   });
